@@ -2,9 +2,9 @@
 Tornado-based boilerplate for API projects
 *********************
 
-.. image:: https://travis-ci.org/gakhov/api.boilerplate.svg?branch=master
-:target: https://travis-ci.org/gakhov/api.boilerplate
+.. image:: https://travis-ci.org/gakhov/api.boilerplate.svg?branch=master :target: https://travis-ci.org/gakhov/api.boilerplate
 
+.. image:: https://coveralls.io/repos/github/gakhov/api.boilerplate/badge.svg?branch=master :target: https://coveralls.io/github/gakhov/api.boilerplate?branch=master
 
 ===========
 How to run

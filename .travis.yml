@@ -12,9 +12,11 @@ services:
 install:
   - make
   - bin/buildout
+  - bin/pip install python-coveralls
 
 script:
-  - PYTHONPATH=$PWD:$PYTHONPATH make all-tests
+  - PYTHONPATH=$PWD:$PYTHONPATH make test
+  - PYTHONPATH=$PWD:$PYTHONPATH make integration-test
 
 after_success:
-  - coveralls
+  - bin/coveralls
