@@ -2,6 +2,9 @@
 Tornado-based boilerplate for API projects
 *********************
 
+.. image:: https://travis-ci.org/gakhov/api.boilerplate.svg?branch=master
+:target: https://travis-ci.org/gakhov/api.boilerplate
+
 
 ===========
 How to run
