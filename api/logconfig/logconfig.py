@@ -51,12 +51,14 @@ class NullHandler(logging.Handler):
 
 def initialize_logging(syslog_tag, syslog_facility, loggers,
                        log_level=logging.INFO, use_syslog=False):
-    """Initialize project's logging
-    """
+    """Initialize project's logging."""
+    syslog_device = None
     if os.path.exists('/dev/log'):
         syslog_device = '/dev/log'
     elif os.path.exists('/var/run/syslog'):
         syslog_device = '/var/run/syslog'
+
+    use_syslog = use_syslog if syslog_device is not None else False
 
     base_fmt = ('%(name)s:%(levelname)s %(message)s')
 
@@ -87,16 +89,18 @@ def initialize_logging(syslog_tag, syslog_facility, loggers,
             'null': {
                 '()': NullHandler,
             },
-            'syslog': {
-                '()': logging.handlers.SysLogHandler,
-                'facility': syslog_facility,
-                'address': syslog_device,
-                'formatter': 'prod',
-            },
         },
         'loggers': {
         }
     }
+
+    if use_syslog:
+        cfg["handlers"]["syslog"] = {
+            '()': logging.handlers.SysLogHandler,
+            'facility': syslog_facility,
+            'address': syslog_device,
+            'formatter': 'prod',
+        }
 
     for key, value in loggers.items():
         cfg[key].update(value)
