@@ -77,8 +77,11 @@ class TestUtilsAccess(unittest.TestCase):
         request.uri = "/v1/tester"
         request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
 
+        endpoint = mock.PropertyMock()
+        endpoint.name = "test"
+
         access.request = request
-        access.endpoint = "test"
+        access.endpoint = endpoint
         access.application = mock.MagicMock(return_value=None)
         access.set_header = mock.MagicMock(return_value=None)
 
@@ -97,8 +100,11 @@ class TestUtilsAccess(unittest.TestCase):
         request.uri = "/v1/noaccess"
         request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
 
+        endpoint = mock.PropertyMock()
+        endpoint.name = "noaccess"
+
         access.request = request
-        access.endpoint = "noaccess"
+        access.endpoint = endpoint
         access.application = mock.MagicMock(return_value=None)
         access.set_header = mock.MagicMock(return_value=None)
 
@@ -123,8 +129,11 @@ class TestUtilsAccess(unittest.TestCase):
         redis.get = mock.MagicMock(return_value=None)
         redis.setex = mock.MagicMock(return_value=True)
 
+        endpoint = mock.PropertyMock()
+        endpoint.name = "test"
+
         access.request = request
-        access.endpoint = "test"
+        access.endpoint = endpoint
         access.application = mock.MagicMock(return_value=None)
         access.application.redis = redis
         access.set_header = mock.MagicMock(return_value=None)
@@ -146,8 +155,11 @@ class TestUtilsAccess(unittest.TestCase):
         redis.decr = mock.MagicMock(return_value=-1)
         redis.ttl = mock.MagicMock(return_value=100)
 
+        endpoint = mock.PropertyMock()
+        endpoint.name = "test"
+
         access.request = request
-        access.endpoint = "test"
+        access.endpoint = endpoint
         access.application = mock.MagicMock()
         access.application.redis = redis
         access.set_header = mock.MagicMock(return_value=None)
@@ -161,8 +173,12 @@ class TestUtilsAccess(unittest.TestCase):
         request = mock.PropertyMock()
         request.uri = "/v1/test"
         request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
+
+        endpoint = mock.PropertyMock()
+        endpoint.name = "test"
+
         access.request = request
-        access.endpoint = "test"
+        access.endpoint = endpoint
 
         with self.assertRaises(AssertionError):
             access.f_authenticated_limited()

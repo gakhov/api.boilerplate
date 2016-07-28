@@ -73,11 +73,12 @@ class Application(EndpointApplication):
     """Main application for /demo endpoint namespace."""
 
     def __init__(self, **settings):
+        endpoint = Endpoint.from_settings(settings)
         handlers = build_versioned_handlers(
+            endpoint,
             ENDPOINT_HANDLERS,
             settings["api_version"],
             settings["deprecated_api_versions"],
             DeprecatedHandler)
 
-        super(Application, self).__init__(
-            Endpoint, handlers, **settings)
+        super(Application, self).__init__(handlers, **settings)

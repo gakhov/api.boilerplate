@@ -50,8 +50,8 @@ def authorized():
                 hasattr(self, "allowed_endpoints")
             ]), "Missing authentication info"
 
-            if self.endpoint in self.allowed_endpoints:
-                endpoint_config = self.allowed_endpoints[self.endpoint]
+            if self.endpoint.name in self.allowed_endpoints:
+                endpoint_config = self.allowed_endpoints[self.endpoint.name]
                 setattr(self, "rate_limit", endpoint_config.get("rate_limit"))
                 setattr(self, "ttl", endpoint_config.get("ttl"))
                 return rh_method(self, *args, **kwargs)
@@ -78,7 +78,7 @@ def rate_limited():
                 return rh_method(self, *args, **kwargs)
 
             now = int(calendar.timegm(datetime.utcnow().utctimetuple()))
-            key = "api:{}:{}".format(self.api_key, self.endpoint)
+            key = "api:{}:{}".format(self.api_key, self.endpoint.name)
 
             current = self.application.redis.get(key)
             if current is not None:

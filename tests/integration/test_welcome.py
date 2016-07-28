@@ -21,7 +21,7 @@ class TestServerWelcomeIntegration(AsyncHTTPTestCase):
         return ServerApplication(**settings)
 
     def test_welcome_get(self):
-        url = "/v{}/".format(settings["api_version"])
+        url = "/".format(settings["api_version"])
         expected = {
             "welcome": "API: version {} (build {}).".format(
                 settings["api_version"], __version__)
@@ -35,7 +35,7 @@ class TestServerWelcomeIntegration(AsyncHTTPTestCase):
         self.assertEqual(json.loads(response.body), expected)
 
     def test_welcome_post(self):
-        url = "/v{}/".format(settings["api_version"])
+        url = "/".format(settings["api_version"])
 
         response = self.fetch(
             url,

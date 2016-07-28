@@ -16,38 +16,34 @@ class Application(tornado.web.Application):
 
     def __init__(self, **settings):
         self._settings = settings
-        self._endpoints = self._settings['registered_endpoints']
-        self.redis = redis.StrictRedis.from_url(settings['redis']["host"])
-
-        global_handlers = [
-            (r'/_health', HealthHandler, dict(settings=settings)),
-            (r'/_version', VersionHandler, dict(settings=settings)),
-        ]
+        self._endpoints = self._settings["registered_endpoints"]
+        self.redis = redis.StrictRedis.from_url(settings["redis"]["host"])
 
         handlers = [
-            (r'/', WelcomeHandler, dict(version=settings["api_version"])),
+            (r"/", WelcomeHandler, dict(version=settings["api_version"])),
+            (r"/_health", HealthHandler, dict(settings=settings)),
+            (r"/_version", VersionHandler, dict(settings=settings)),
         ]
-        for name in self._endpoints:
-            module = resolve_name('api.endpoints.' + name)
-            handlers += getattr(module, 'ENDPOINT_HANDLERS')
 
-        handlers = build_versioned_handlers(
-            handlers,
-            settings["api_version"],
-            settings["deprecated_api_versions"],
-            DeprecatedHandler)
-        handlers += global_handlers
+        for name in self._endpoints:
+            module = resolve_name("api.endpoints." + name)
+            endpoint = getattr(module, "Endpoint").from_settings(settings)
+
+            endpoint_handlers = getattr(module, "ENDPOINT_HANDLERS")
+            handlers.extend(
+                build_versioned_handlers(
+                    endpoint,
+                    endpoint_handlers,
+                    settings["api_version"],
+                    settings["deprecated_api_versions"],
+                    DeprecatedHandler)
+            )
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
-        for name in self._endpoints:
-            module = resolve_name('api.endpoints.' + name)
-            endpoint = getattr(module, 'Endpoint').from_settings(settings)
-            setattr(self, name, endpoint)
-
 
 class HealthHandler(RequestHandler):
-    """Check system's health status."""
+    """Check system"s health status."""
 
     def initialize(self, settings):
         self._settings = settings
@@ -55,7 +51,7 @@ class HealthHandler(RequestHandler):
     @tornado.gen.coroutine
     def get(self):
         # TODO: implement a simple health check here.
-        # Important! It shouldn't be too expensive, because this
+        # Important! It shouldn"t be too expensive, because this
         # endpoint suppose to be called by load balancers quite often.
 
         ok = True

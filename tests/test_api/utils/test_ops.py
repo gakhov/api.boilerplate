@@ -37,33 +37,41 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0"),
-            ("/v2/test1", "TEST1"),
+            ("/v2/test0", "TEST0", {"endpoint": None}),
+            ("/v2/test1", "TEST1", {"endpoint": None}),
             ("/v1/test0", "DEPRECATED"),
             ("/v1/test1", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
-            handlers, active_version, deprecated_versions, deprecated_handler)
+            None,
+            handlers,
+            active_version,
+            deprecated_versions,
+            deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_build_versioned_handlers_long_handler(self):
         handlers = [
-            ("/test0", "TEST0", "ADDITIONAL"),
+            ("/test0", "TEST0", {"ADDITIONAL": True}),
             ("/test1", "TEST1"),
         ]
         active_version = '2'
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0", "ADDITIONAL"),
-            ("/v2/test1", "TEST1"),
+            ("/v2/test0", "TEST0", {"ADDITIONAL": True, "endpoint": None}),
+            ("/v2/test1", "TEST1", {"endpoint": None}),
             ("/v1/test0", "DEPRECATED"),
             ("/v1/test1", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
-            handlers, active_version, deprecated_versions, deprecated_handler)
+            None,
+            handlers,
+            active_version,
+            deprecated_versions,
+            deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_build_versioned_handlers_no_deprecated(self):
@@ -75,12 +83,16 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = []
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0"),
-            ("/v2/test1", "TEST1"),
+            ("/v2/test0", "TEST0", {"endpoint": None}),
+            ("/v2/test1", "TEST1", {"endpoint": None}),
         ]
 
         versioned = build_versioned_handlers(
-            handlers, active_version, deprecated_versions, deprecated_handler)
+            None,
+            handlers,
+            active_version,
+            deprecated_versions,
+            deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_build_versioned_handlers_not_override_deprecated(self):
@@ -92,13 +104,17 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0"),
-            ("/v1/test1", "TEST1"),
+            ("/v2/test0", "TEST0", {"endpoint": None}),
+            ("/v1/test1", "TEST1", {"endpoint": None}),
             ("/v1/test0", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
-            handlers, active_version, deprecated_versions, deprecated_handler)
+            None,
+            handlers,
+            active_version,
+            deprecated_versions,
+            deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_resolve_name(self):

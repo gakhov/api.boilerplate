@@ -23,26 +23,47 @@ def _is_versioned_path(path):
     return parsed is not None
 
 
-def build_versioned_handlers(handlers, active_version, deprecated_versions,
-                             deprecated_handler):
-    """Build versioned handlers and add a special deprecated_handler for
-    paths in deprecated API versions.
+def build_versioned_handlers(endpoint, handlers, active_version,
+                             deprecated_versions, deprecated_handler):
+    """Build versioned handlers.
+
+    Connect handlers with the specified endpoint and add a special
+    deprecated_handler for deprecated API paths.
     """
-    versioned = []
+    endpoint_handlers = []
     for handler in handlers:
-        if _is_versioned_path(handler[0]):
+        try:
+            path, cls, settings = handler
+        except ValueError:
+            path, cls = handler
+            settings = {}
+
+        settings["endpoint"] = endpoint
+        endpoint_handlers.append(
+            (path, cls, settings)
+        )
+
+    versioned = []
+    for handler in endpoint_handlers:
+        path, cls, settings = handler
+
+        if _is_versioned_path(path):
             versioned.append(handler)
             continue
+
         versioned.append(
-            ("/v{}{}".format(active_version, handler[0]), ) + handler[1:]
+            ("/v{}{}".format(active_version, path), cls, settings)
         )
 
     versioned_paths = set([h[0] for h in versioned])
     for version in deprecated_versions:
-        for handler in handlers:
-            if _is_versioned_path(handler[0]):
+        for handler in endpoint_handlers:
+            path, _, _ = handler
+
+            if _is_versioned_path(path):
                 continue
-            deprecated_path = "/v{}{}".format(version, handler[0])
+
+            deprecated_path = "/v{}{}".format(version, path)
             if deprecated_path not in versioned_paths:
                 versioned.append(
                     (deprecated_path, deprecated_handler)
