@@ -7,8 +7,8 @@ from datetime import datetime
 from ...handlers import DeprecatedHandler
 from ...utils.ops import build_versioned_handlers
 from ..base import (
-    AbstractEndpoint,
-    EndpointApplication
+    BaseEndpoint,
+    BaseEndpointApplication
 )
 
 from .handlers import (
@@ -23,7 +23,7 @@ ENDPOINT_HANDLERS = [
 ]
 
 
-class Endpoint(AbstractEndpoint):
+class Endpoint(BaseEndpoint):
     """Base class for /demo endpoint namespace."""
 
     name = 'demo'
@@ -69,7 +69,7 @@ class Endpoint(AbstractEndpoint):
         raise tornado.gen.Return(result)
 
 
-class Application(EndpointApplication):
+class Application(BaseEndpointApplication):
     """Main application for /demo endpoint namespace."""
 
     def __init__(self, **settings):

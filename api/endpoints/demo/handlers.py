@@ -6,7 +6,7 @@ from ...utils.schema import (
     input_validate_post,
     output_validate
 )
-from ..base import AbstractEndpointHandler
+from ..base import BaseEndpointHandler
 from .schema import (
     DELETE_OUTPUT_SCHEMA,
     GET_OUTPUT_SCHEMA,
@@ -22,9 +22,8 @@ __all__ = [
 ]
 
 
-class DemoHandler(AbstractEndpointHandler):
-    """Main Handler for /demo endpoint
-    """
+class DemoHandler(BaseEndpointHandler):
+    """Main Handler for /demo endpoint."""
 
     @output_validate(GET_OUTPUT_SCHEMA)
     @tornado.gen.coroutine
@@ -47,7 +46,7 @@ class DemoHandler(AbstractEndpointHandler):
         raise tornado.gen.Return(result)
 
 
-class DemoCreateHandler(AbstractEndpointHandler):
+class DemoCreateHandler(BaseEndpointHandler):
     """Create Handler for /demo endpoint."""
 
     @input_validate_post(POST_INPUT_SCHEMA)
