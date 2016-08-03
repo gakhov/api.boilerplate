@@ -66,8 +66,8 @@ local/
 !/logs/.keep
 /parts/
 .installed.cfg
-alembic.ini
-supervisord.conf
+/alembic.ini
+/supervisord.conf
 *.egg-info
 *.orig
 *.mo
