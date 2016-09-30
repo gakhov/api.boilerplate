@@ -21,11 +21,10 @@ setup(
     include_package_data=True,
     extras_require=dict(
         test=[
-            "pytest==2.9.2",
+            "pytest>=3.0.1,<4.0.0",
             "pytest-cov==2.3.0",
             "pytest-pep8==1.0.6",
             "mock==2.0.0",
-            "fabric==1.12.0"
         ],
     ),
     install_requires=[

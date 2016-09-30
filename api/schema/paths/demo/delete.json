@@ -1,0 +1,72 @@
+{
+    "summary": "Delete a document by ID",
+    "description": "Delete a document by its ID",
+    "operationId": "deleteDocument",
+    "produces": [
+        "application/json"
+    ],
+    "parameters": [
+        {
+            "name": "id",
+            "in": "path",
+            "description": "Document ID.",
+            "required": true,
+            "type": "string"
+        }
+    ],
+    "security": [
+        {
+            "access_token": []
+        }
+    ],
+    "tags": [
+        "demo"
+    ],
+    "responses": {
+        "200": {
+            "description": "Document has been deleted",
+            "schema": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Internal Document ID."
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Delete date of the Document."
+                    }
+                },
+                "required": [
+                    "id",
+                    "deleted_at"
+                ]
+            },
+            "headers": {
+                "X-API-Version": {
+                    "description": "API version",
+                    "type": "string"
+                },
+                "Server": {
+                    "description": "API title",
+                    "type": "string"
+                }
+            }
+        },
+        "400": {
+            "$ref": "#/responses/BadRequest"
+        },
+        "401": {
+            "$ref": "#/responses/NotAuthenticated"
+        },
+        "403": {
+            "$ref": "#/responses/Forbidden"
+        },
+        "404": {
+            "$ref": "#/responses/NotFound"
+        },
+        "default": {
+            "$ref": "#/responses/Unexpected"
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "summary": "API Welcome",
+    "description": "Welcome message from API with currently active version and build.",
+    "operationId": "getWelcomeMessage",
+    "tags": [
+        "tech"
+    ],
+    "responses": {
+        "200": {
+            "description": "API welcome message",
+            "schema": {
+                "properties": {
+                    "welcome": {
+                        "type": "string"
+                    }
+                }
+            },
+            "headers": {
+                "X-API-Version": {
+                    "description": "API version",
+                    "type": "string"
+                },
+                "Server": {
+                    "description": "API title",
+                    "type": "string"
+                }
+            }
+        },
+        "default": {
+            "$ref": "#/responses/Unexpected"
+        }
+    }
+}

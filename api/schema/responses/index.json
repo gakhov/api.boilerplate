@@ -1,0 +1,98 @@
+{
+    "BadRequest": {
+        "description": "Bad Request",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    },
+    "NotAuthenticated": {
+        "description": "Not Authenticated",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    },
+    "Forbidden": {
+        "description": "Forbidden",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    },
+    "PreconditionFailed": {
+        "description": "Precondition Failed",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    },
+    "NotFound": {
+        "description": "Not Found",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    },
+    "Unexpected": {
+        "description": "Unexpected error",
+        "schema": {
+            "$ref": "#/definitions/Error"
+        },
+        "headers": {
+            "X-API-Version": {
+                "description": "API version",
+                "type": "string"
+            },
+            "Server": {
+                "description": "API title",
+                "type": "string"
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "Document": {
+        "$ref": "./document.json"
+    },
+    "Error": {
+        "properties": {
+            "status": {
+                "type": "integer",
+                "format": "int32"
+            },
+            "error": {
+                "type": "string"
+            },
+            "details": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "status",
+            "error",
+            "details"
+        ]
+    }
+}
