@@ -14,7 +14,8 @@ of the environments is active.
 
 .. note::
 
-    In all environments (except ``local``) logs are forwarded to ``syslog`` (``local2``).
+    In all environments (except ``local``) logs are forwarded to ``syslog`` (``local2``) if
+    ``IN_DOCKER_CONTAINER`` is `false`, otherwise - to standard output.
 
 
 .. warning::

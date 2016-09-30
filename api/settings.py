@@ -23,6 +23,7 @@ class EnvironmentType:
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ENV = os.environ.get("API_ENV", EnvironmentType.LOCAL)
+IN_DOCKER_CONTAINER = os.environ.get("IN_DOCKER_CONTAINER", False)
 
 settings = {}
 settings["debug"] = ENV != EnvironmentType.PRODUCTION
@@ -69,5 +70,5 @@ LOGGERS = {
 }
 
 LOG_LEVEL = logging.DEBUG if settings["debug"] else logging.INFO
-USE_SYSLOG = ENV != EnvironmentType.LOCAL
+USE_SYSLOG = not IN_DOCKER_CONTAINER and ENV != EnvironmentType.LOCAL
 initialize_logging(SYSLOG_TAG, SYSLOG_FACILITY, LOGGERS, LOG_LEVEL, USE_SYSLOG)

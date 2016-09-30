@@ -38,6 +38,8 @@ Environment variables
 +-------------------------------+---------------------------------------------------------------------+
 | ``API_REDIS_SERVER``          | full path of redis server to store cached auth details              |
 +-------------------------------+---------------------------------------------------------------------+
+| ``IN_DOCKER_CONTAINER``       | indicator that the application is executed inside docker container  |
++-------------------------------+---------------------------------------------------------------------+
 
 
 ----------
