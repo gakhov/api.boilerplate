@@ -1,6 +1,7 @@
-********************************************
+|logo|
+
 Tornado-based boilerplate for API projects
-********************************************
+--------------------------------------------
 
 .. image:: https://travis-ci.org/gakhov/api.boilerplate.svg?branch=master
    :target: https://travis-ci.org/gakhov/api.boilerplate
@@ -9,9 +10,8 @@ Tornado-based boilerplate for API projects
    :target: https://coveralls.io/github/gakhov/api.boilerplate?branch=master
 
 
-**************
 How to start
-**************
+-------------
 
 First, you need to clone or fork our API boilerplate. If you choose clone, go to your machine and run
 
@@ -28,10 +28,14 @@ Afterwards you need to add your remote to the git repository to be able commit y
     $ git remote add origin https://github.com/user/{your_repo}.git
 
 
+Documentation
+-------------
 
-===========
+* `HEAD <http://apiboilerplate.readthedocs.io/en/latest/>`_
+
+
 How to run
-===========
+-------------
 
 .. code-block:: bash
 
@@ -40,35 +44,4 @@ How to run
     $ bin/start_server --name server --port 5570
 
 
-==============
-Configuration
-==============
-
-We support 3 different environments: `testing`, `staging` and `production`. The deployment settings for them are stored in `etc/deploy.json`.
-
------------
-Deployment
------------
-
-.. code-block:: bash
-
-    $ make
-    $ bin/buildout
-    $ bin/fab staging deploy
-
-
----------------------
-Server configuration
----------------------
-
-.. code-block:: javascript
-
-    {
-        tbd.
-    }
-
-
-.. code-block:: bash
-
-    $ bin/start_server --settings '{}'
-
+.. |logo| image:: https://raw.githubusercontent.com/gakhov/api.boilerplate/master/api/docs/_static/logo.png
