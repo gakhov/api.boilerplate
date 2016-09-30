@@ -62,8 +62,7 @@ def deploy(branch=None, subdir=None):
 
     with cd(build_dir):
         run("make")
-        run("API_SERVER_NAME={} bin/buildout -c {}.cfg".format(
-            env.host, env.env_type))
+        run("bin/buildout -c {}.cfg".format(env.env_type))
         if env.env_type == "testing":
             run("make test")
         else:

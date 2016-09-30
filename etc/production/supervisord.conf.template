@@ -22,11 +22,11 @@ serverurl = unix://var/supervisor.sock
 supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
 
 ; ==================================
-;  api server
+;  API server
 ; ==================================
 
 [program:server5570]
-environment=API_ENV=${API_ENV}
+environment=API_ENV=testing,API_REDIS_SERVER="redis://localhost:6379/2"
 command = bin/start_server --name server5570 --port 5570
 
 autostart = true
@@ -35,12 +35,3 @@ autorestart = true
 stdout_logfile=var/log/server5570-stdout.log
 stderr_logfile=var/log/server5570-stderr.log
 
-[program:server5571]
-environment=API_ENV=${API_ENV}
-command = bin/start_server --name server5571 --port 5571
-
-autostart = true
-autorestart = true
-
-stdout_logfile=var/log/server5571-stdout.log
-stderr_logfile=var/log/server5571-stderr.log
