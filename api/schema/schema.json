@@ -39,8 +39,8 @@
             "description": "General purpose endpoints"
         },
         {
-            "name": "demo",
-            "description": "Demo endpoints"
+            "name": "document",
+            "description": "Document endpoints"
         }
     ],
     "responses": {

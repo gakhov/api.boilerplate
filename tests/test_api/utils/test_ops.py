@@ -118,9 +118,9 @@ class TestUtilsOps(unittest.TestCase):
         self.assertEqual(versioned, expected)
 
     def test_resolve_name(self):
-        module = resolve_name("api.endpoints.demo")
+        module = resolve_name("api.endpoints.document")
         self.assertIsNotNone(module)
-        self.assertEqual(module.__name__, "api.endpoints.demo")
+        self.assertEqual(module.__name__, "api.endpoints.document")
 
     def test_resolve_name_missing(self):
         with self.assertRaises(ImportError):
@@ -131,7 +131,7 @@ class TestUtilsOps(unittest.TestCase):
             resolve_name("")
 
     def test_get_endpoint_app(self):
-        name = "demo"
+        name = "document"
         app = get_endpoint_app(name)
         self.assertIsNotNone(app)
         self.assertEqual(app.__name__, "Application")

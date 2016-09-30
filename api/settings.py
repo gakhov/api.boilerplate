@@ -32,36 +32,26 @@ settings["default_handler_args"] = dict(status_code=404)
 settings["default_server_name"] = "server5570"
 settings["default_server_port"] = 5570
 settings["registered_endpoints"] = [
-    "demo",
+    "document",
 ]
 
-settings["customers"] = {
-    "customer01.1461678154.46K8LelsimIXzQp1PRc": {
-        "customer": "customer01",
-        "allowed_endpoints": {
-            "demo": {
-                "rate_limit": 100,
-                "ttl": 86400  # 1 day in seconds
-            }
-        }
-    },
-    "test.1461680306.HeEEI73nvembtLHk2eM": {
-        "customer": "test",
-        "allowed_endpoints": {
-            "test": {
-                "rate_limit": 1000,
-                "ttl": 86400  # 1 day in seconds
-            }
-        }
-    }
+
+settings["authentication"] = {
+    "server": {}
+}
+settings["redis"] = {
+    "url": os.environ.get(
+        "API_REDIS_SERVER",
+        "redis://localhost:6379/2"),
+}
+
+settings["concurrency"] = {
+    "threads": 2
 }
 
 settings["api_version"] = "1"
 settings["deprecated_api_versions"] = []
 
-settings["redis"] = {
-    "host": "redis://localhost:6379/2",
-}
 
 SYSLOG_TAG = "api"
 SYSLOG_FACILITY = logging.handlers.SysLogHandler.LOG_LOCAL2

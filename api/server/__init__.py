@@ -4,9 +4,11 @@ from __future__ import unicode_literals
 import redis
 import tornado.web
 
-from ..exceptions import APIServerError
+from tornado.concurrent import futures
+
 
 from .. import __version__
+from ..exceptions import APIServerError
 from ..handlers import RequestHandler, DeprecatedHandler
 from ..utils.ops import resolve_name, build_versioned_handlers
 
@@ -17,7 +19,11 @@ class Application(tornado.web.Application):
     def __init__(self, **settings):
         self._settings = settings
         self._endpoints = self._settings["registered_endpoints"]
-        self.redis = redis.StrictRedis.from_url(settings["redis"]["host"])
+
+        self._executor = futures.ThreadPoolExecutor(
+            settings["concurrency"].get("threads", 1))
+        self._redis = redis.StrictRedis.from_url(
+            settings["redis"]["url"])
 
         handlers = [
             (r"/", WelcomeHandler, dict(version=settings["api_version"])),

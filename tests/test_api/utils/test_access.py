@@ -1,184 +1,120 @@
 # -*- encoding: utf-8 -*-
 
 import unittest
-import mock
 
 from api.exceptions import APIClientError
 from api.utils.access import (
-    authorized,
-    authenticated,
-    rate_limited
+    _SUPERADMIN_SCOPE,
+    _TEST_SCOPE,
+    authorized
 )
 
 
 class AccessTest(object):
     """Test class with different variants of using access decorators."""
 
-    @authenticated()
-    def f_authenticated(self):
-        pass
+    def __init__(self, test=None):
+        self._test = test
 
-    @authenticated()
-    @authorized()
-    def f_authenticated_authorized(self):
-        pass
+    def get_query_argument(self, name, default=None):
+        return getattr(self, name, default)
 
     @authorized()
     def f_authorized(self):
         pass
 
-    @authenticated()
-    @authorized()
-    @rate_limited()
-    def f_authenticated_authorized_limited(self):
-        pass
-
-    @authenticated()
-    @rate_limited()
-    def f_authenticated_limited(self):
+    @authorized(["some-get"])
+    def f_authenticated_authorized_scopes(self):
         pass
 
 
 class TestUtilsAccess(unittest.TestCase):
 
-    def test_authenticated(self):
-        request = mock.PropertyMock()
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
-
-        access = AccessTest()
-        access.request = request
-
-        access.f_authenticated()
-
-    def test_authenticated_nokey(self):
-        access = AccessTest()
-
-        request = mock.PropertyMock()
-        request.query = "missing=test"
-        access.request = request
-
-        with self.assertRaises(APIClientError):
-            access.f_authenticated()
-
-    def test_authenticated_invalidkey(self):
-        access = AccessTest()
-
-        request = mock.PropertyMock()
-        request.query = "api_key=invalid"
-        access.request = request
-
-        with self.assertRaises(APIClientError):
-            access.f_authenticated()
-
-    def test_authorized(self):
-        access = AccessTest()
-
-        request = mock.PropertyMock()
-        request.uri = "/v1/tester"
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
-
-        endpoint = mock.PropertyMock()
-        endpoint.name = "test"
-
-        access.request = request
-        access.endpoint = endpoint
-        access.application = mock.MagicMock(return_value=None)
-        access.set_header = mock.MagicMock(return_value=None)
-
-        access.f_authenticated_authorized()
-
-        self.assertTrue(hasattr(access, "rate_limit"))
-        self.assertEqual(access.rate_limit, 1000)
-
-        self.assertTrue(hasattr(access, "ttl"))
-        self.assertEqual(access.ttl, 86400)
-
-    def test_authorized_noaccess_endpoint(self):
-        access = AccessTest()
-
-        request = mock.PropertyMock()
-        request.uri = "/v1/noaccess"
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
-
-        endpoint = mock.PropertyMock()
-        endpoint.name = "noaccess"
-
-        access.request = request
-        access.endpoint = endpoint
-        access.application = mock.MagicMock(return_value=None)
-        access.set_header = mock.MagicMock(return_value=None)
-
-        with self.assertRaises(APIClientError):
-            access.f_authenticated_authorized()
-
     def test_authorized_not_authenticated(self):
         access = AccessTest()
-        access.request = mock.PropertyMock()
 
         with self.assertRaises(AssertionError):
             access.f_authorized()
 
-    def test_limited(self):
+    def test_authenticated_authorized_test(self):
+        access = AccessTest(test=True)
+
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = [_TEST_SCOPE, "some-get"]
+
+        access.f_authenticated_authorized_scopes()
+        self.assertTrue(hasattr(access, "__is_test"))
+        self.assertTrue(getattr(access, "__is_test"))
+
+    def test_authenticated_authorized_superadmin_no_required_scopes(self):
         access = AccessTest()
 
-        request = mock.PropertyMock()
-        request.uri = "/v1/test"
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = [_SUPERADMIN_SCOPE]
 
-        redis = mock.MagicMock()
-        redis.get = mock.MagicMock(return_value=None)
-        redis.setex = mock.MagicMock(return_value=True)
+        access.f_authorized()
+        self.assertTrue(hasattr(access, "__is_super"))
+        self.assertTrue(getattr(access, "__is_super"))
 
-        endpoint = mock.PropertyMock()
-        endpoint.name = "test"
-
-        access.request = request
-        access.endpoint = endpoint
-        access.application = mock.MagicMock(return_value=None)
-        access.application.redis = redis
-        access.set_header = mock.MagicMock(return_value=None)
-
-        access.f_authenticated_authorized_limited()
-
-        access.set_header.assert_any_call("X-RateLimit-Limit", 1000)
-        access.set_header.assert_any_call("X-RateLimit-Remaining", 999)
-
-    def test_limited_exceeded(self):
+    def test_authenticated_authorized_superadmin_with_required_scopes(self):
         access = AccessTest()
 
-        request = mock.PropertyMock()
-        request.uri = "/v1/test"
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = [_SUPERADMIN_SCOPE]
 
-        redis = mock.MagicMock()
-        redis.get = mock.MagicMock(return_value=True)
-        redis.decr = mock.MagicMock(return_value=-1)
-        redis.ttl = mock.MagicMock(return_value=100)
+        access.f_authenticated_authorized_scopes()
+        self.assertTrue(hasattr(access, "__is_super"))
+        self.assertTrue(getattr(access, "__is_super"))
 
-        endpoint = mock.PropertyMock()
-        endpoint.name = "test"
+    def test_authenticated_authorized_noscopes_no_required_scopes(self):
+        access = AccessTest()
 
-        access.request = request
-        access.endpoint = endpoint
-        access.application = mock.MagicMock()
-        access.application.redis = redis
-        access.set_header = mock.MagicMock(return_value=None)
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = []
 
         with self.assertRaises(APIClientError):
-            access.f_authenticated_authorized_limited()
+            access.f_authorized()
 
-    def test_limited_not_authorized(self):
+    def test_authenticated_authorized_noscopes_with_required_scopes(self):
         access = AccessTest()
 
-        request = mock.PropertyMock()
-        request.uri = "/v1/test"
-        request.query = "api_key=test.1461680306.HeEEI73nvembtLHk2eM"
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = []
 
-        endpoint = mock.PropertyMock()
-        endpoint.name = "test"
+        with self.assertRaises(APIClientError):
+            access.f_authenticated_authorized_scopes()
 
-        access.request = request
-        access.endpoint = endpoint
+    def test_authenticated_authorized_badscopes_no_required_scopes(self):
+        access = AccessTest()
 
-        with self.assertRaises(AssertionError):
-            access.f_authenticated_limited()
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = ["some-scope"]
+
+        with self.assertRaises(APIClientError):
+            access.f_authorized()
+
+    def test_authenticated_authorized_badscopes_with_required_scopes(self):
+        access = AccessTest()
+
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = ["some-scope"]
+
+        with self.assertRaises(APIClientError):
+            access.f_authenticated_authorized_scopes()
+
+    def test_authenticated_authorized_validscopes_with_required_scopes(self):
+        access = AccessTest()
+
+        access._access_token = "token-123"
+        access._user_id = "user123"
+        access._scopes = ["some-get"]
+
+        access.f_authenticated_authorized_scopes()
+        self.assertFalse(hasattr(access, "__is_super"))

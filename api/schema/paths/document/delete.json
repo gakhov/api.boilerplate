@@ -1,22 +1,17 @@
 {
-    "summary": "Create a new document",
-    "description": "Create a new document",
-    "operationId": "createDocument",
+    "summary": "Delete a document by ID",
+    "description": "Delete a document by its ID",
+    "operationId": "deleteDocument",
     "produces": [
         "application/json"
     ],
     "parameters": [
         {
-            "name": "body",
-            "in": "body",
-            "schema": {
-                "properties": {
-                    "text": {
-                        "type": "string",
-                        "description": "Text of the document."
-                    }
-                }
-            }
+            "name": "id",
+            "in": "path",
+            "description": "Document ID.",
+            "required": true,
+            "type": "string"
         }
     ],
     "security": [
@@ -25,26 +20,26 @@
         }
     ],
     "tags": [
-        "demo"
+        "document"
     ],
     "responses": {
         "200": {
-            "description": "Document has been created",
+            "description": "Document has been deleted",
             "schema": {
                 "properties": {
                     "id": {
                         "type": "integer",
                         "description": "Internal Document ID."
                     },
-                    "created_at": {
+                    "deleted_at": {
                         "type": "string",
                         "format": "date",
-                        "description": "Creation date of the Document."
+                        "description": "Delete date of the Document."
                     }
                 },
                 "required": [
                     "id",
-                    "created_at"
+                    "deleted_at"
                 ]
             },
             "headers": {
@@ -66,6 +61,9 @@
         },
         "403": {
             "$ref": "#/responses/Forbidden"
+        },
+        "404": {
+            "$ref": "#/responses/NotFound"
         },
         "default": {
             "$ref": "#/responses/Unexpected"

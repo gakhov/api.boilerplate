@@ -1,21 +1,21 @@
-api.endpoints.demo package
+api.endpoints.document package
 ==========================
 
 Submodules
 ----------
 
-api.endpoints.demo.handlers module
+api.endpoints.document.handlers module
 ----------------------------------
 
-.. automodule:: api.endpoints.demo.handlers
+.. automodule:: api.endpoints.document.handlers
     :members:
     :undoc-members:
     :show-inheritance:
 
-api.endpoints.demo.schema module
+api.endpoints.document.schema module
 --------------------------------
 
-.. automodule:: api.endpoints.demo.schema
+.. automodule:: api.endpoints.document.schema
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ api.endpoints.demo.schema module
 Module contents
 ---------------
 
-.. automodule:: api.endpoints.demo
+.. automodule:: api.endpoints.document
     :members:
     :undoc-members:
     :show-inheritance:

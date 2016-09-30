@@ -39,11 +39,11 @@ class ServiceTest(TestCase):
 
     @mock.patch('argparse.ArgumentParser.parse_args')
     @mock.patch('tornado.ioloop.IOLoop')
-    def test_endpoint_demo(self, mock_ioloop, mock_parse_args):
+    def test_endpoint_document(self, mock_ioloop, mock_parse_args):
         mock_ioloop.instance.return_value = mock_ioloop
 
         args = mock.MagicMock()
-        args.name = "demo"
+        args.name = "document"
         args.port = get_unused_port()
         args.settings = "{}"
         mock_parse_args.return_value = args

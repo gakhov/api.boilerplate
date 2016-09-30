@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    api.endpoints.demo
+    api.endpoints.document
 
 Submodules
 ----------

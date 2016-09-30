@@ -4,20 +4,20 @@
             "$ref": "./welcome/get.json"
         }
     },
-    "/demo": {
+    "/document": {
         "post": {
-            "$ref": "./demo/post.json"
+            "$ref": "./document/post.json"
         }
     },
-    "/demo/{id}": {
+    "/document/{id}": {
         "get": {
-            "$ref": "./demo/get.json"
+            "$ref": "./document/get.json"
         },
         "put": {
-            "$ref": "./demo/put.json"
+            "$ref": "./document/put.json"
         },
         "delete": {
-            "$ref": "./demo/delete.json"
+            "$ref": "./document/delete.json"
         }
     }
 }

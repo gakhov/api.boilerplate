@@ -1,7 +1,7 @@
 {
-    "summary": "Delete a document by ID",
-    "description": "Delete a document by its ID",
-    "operationId": "deleteDocument",
+    "summary": "Update the Document by ID",
+    "description": "Partial update of the Document by its ID",
+    "operationId": "updateDocument",
     "produces": [
         "application/json"
     ],
@@ -12,6 +12,18 @@
             "description": "Document ID.",
             "required": true,
             "type": "string"
+        },
+        {
+            "name": "body",
+            "in": "body",
+            "schema": {
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Text of the Document."
+                    }
+                }
+            }
         }
     ],
     "security": [
@@ -20,26 +32,26 @@
         }
     ],
     "tags": [
-        "demo"
+        "document"
     ],
     "responses": {
         "200": {
-            "description": "Document has been deleted",
+            "description": "Document has been updated",
             "schema": {
                 "properties": {
                     "id": {
                         "type": "integer",
                         "description": "Internal Document ID."
                     },
-                    "deleted_at": {
+                    "updated_at": {
                         "type": "string",
                         "format": "date",
-                        "description": "Delete date of the Document."
+                        "description": "Update date of the Document."
                     }
                 },
                 "required": [
                     "id",
-                    "deleted_at"
+                    "updated_at"
                 ]
             },
             "headers": {

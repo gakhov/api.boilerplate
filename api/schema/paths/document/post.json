@@ -1,18 +1,11 @@
 {
-    "summary": "Update the Document by ID",
-    "description": "Partial update of the Document by its ID",
-    "operationId": "updateDocument",
+    "summary": "Create a new document",
+    "description": "Create a new document",
+    "operationId": "createDocument",
     "produces": [
         "application/json"
     ],
     "parameters": [
-        {
-            "name": "id",
-            "in": "path",
-            "description": "Document ID.",
-            "required": true,
-            "type": "string"
-        },
         {
             "name": "body",
             "in": "body",
@@ -20,7 +13,7 @@
                 "properties": {
                     "text": {
                         "type": "string",
-                        "description": "Text of the Document."
+                        "description": "Text of the document."
                     }
                 }
             }
@@ -32,26 +25,26 @@
         }
     ],
     "tags": [
-        "demo"
+        "document"
     ],
     "responses": {
         "200": {
-            "description": "Document has been updated",
+            "description": "Document has been created",
             "schema": {
                 "properties": {
                     "id": {
                         "type": "integer",
                         "description": "Internal Document ID."
                     },
-                    "updated_at": {
+                    "created_at": {
                         "type": "string",
                         "format": "date",
-                        "description": "Update date of the Document."
+                        "description": "Creation date of the Document."
                     }
                 },
                 "required": [
                     "id",
-                    "updated_at"
+                    "created_at"
                 ]
             },
             "headers": {
@@ -73,9 +66,6 @@
         },
         "403": {
             "$ref": "#/responses/Forbidden"
-        },
-        "404": {
-            "$ref": "#/responses/NotFound"
         },
         "default": {
             "$ref": "#/responses/Unexpected"

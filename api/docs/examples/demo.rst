@@ -1,5 +1,5 @@
 ==================
-/demo endpoint
+/document endpoint
 ==================
 
 ---------------------
@@ -10,7 +10,7 @@ Retrieve a document
 Scopes
 ^^^^^^^
 
-`get-document`
+`get-document`, `update-document`
 
 
 ^^^^^^^^
@@ -19,7 +19,7 @@ Request
 
 ::
 
-    curl -XGET -H "Content-type: application/json" "https://{SERVER}/v1/demo/lu165gsQI9cxly2J3MM?access_token={TOKEN}"
+    curl -XGET -H "Content-type: application/json" "https://{SERVER}/v1/document/lu165gsQI9cxly2J3MM?access_token={TOKEN}"
 
 
 ^^^^^^^^
@@ -52,7 +52,7 @@ Request
 
 ::
 
-    curl -XPOST -H "Content-type: application/json" "https://{SERVER}/v1/demo?access_token={TOKEN}" -d '{
+    curl -XPOST -H "Content-type: application/json" "https://{SERVER}/v1/document?access_token={TOKEN}" -d '{
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     }'
 
@@ -87,7 +87,7 @@ Request
 
 ::
 
-    curl -XPUT -H "Content-type: application/json" "https://{SERVER}/v1/demo/lu165gsQI9cxly2J3MM?access_token={TOKEN}" -d '{
+    curl -XPUT -H "Content-type: application/json" "https://{SERVER}/v1/document/lu165gsQI9cxly2J3MM?access_token={TOKEN}" -d '{
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     }'
 
@@ -122,7 +122,7 @@ Request
 
 ::
 
-    curl -XDELETE -H "Content-type: application/json" "https://{SERVER}/v1/demo/lu165gsQI9cxly2J3MM?access_token={TOKEN}"
+    curl -XDELETE -H "Content-type: application/json" "https://{SERVER}/v1/document/lu165gsQI9cxly2J3MM?access_token={TOKEN}"
 
 
 ^^^^^^^^
