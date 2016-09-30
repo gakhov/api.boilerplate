@@ -1,0 +1,53 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API Boilerplate",
+        "description": "Tornado-based boilerplate for API projects",
+        "version": "1",
+        "contact": {
+            "name": "@gakhov",
+            "url": "https://github.com/gakhov/api.boilerplate",
+            "email": "andrii.gakhov@gmail.com"
+        }
+    },
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/v1",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "$ref": "./paths/index.json"
+    },
+    "definitions": {
+        "$ref": "./definitions/index.json"
+    },
+    "securityDefinitions": {
+        "access_token": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "tags": [
+        {
+            "name": "tech",
+            "description": "General purpose endpoints"
+        },
+        {
+            "name": "demo",
+            "description": "Demo endpoints"
+        }
+    ],
+    "responses": {
+        "$ref": "./responses/index.json"
+    },
+    "externalDocs": {
+        "description": "Find more info here",
+        "url": "https://github.com/gakhov/api.boilerplate"
+    }
+}

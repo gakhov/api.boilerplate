@@ -1,0 +1,23 @@
+{
+    "/": {
+        "get": {
+            "$ref": "./welcome/get.json"
+        }
+    },
+    "/demo": {
+        "post": {
+            "$ref": "./demo/post.json"
+        }
+    },
+    "/demo/{id}": {
+        "get": {
+            "$ref": "./demo/get.json"
+        },
+        "put": {
+            "$ref": "./demo/put.json"
+        },
+        "delete": {
+            "$ref": "./demo/delete.json"
+        }
+    }
+}

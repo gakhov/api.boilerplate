@@ -1,0 +1,84 @@
+{
+    "summary": "Update the Document by ID",
+    "description": "Partial update of the Document by its ID",
+    "operationId": "updateDocument",
+    "produces": [
+        "application/json"
+    ],
+    "parameters": [
+        {
+            "name": "id",
+            "in": "path",
+            "description": "Document ID.",
+            "required": true,
+            "type": "string"
+        },
+        {
+            "name": "body",
+            "in": "body",
+            "schema": {
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Text of the Document."
+                    }
+                }
+            }
+        }
+    ],
+    "security": [
+        {
+            "access_token": []
+        }
+    ],
+    "tags": [
+        "demo"
+    ],
+    "responses": {
+        "200": {
+            "description": "Document has been updated",
+            "schema": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Internal Document ID."
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Update date of the Document."
+                    }
+                },
+                "required": [
+                    "id",
+                    "updated_at"
+                ]
+            },
+            "headers": {
+                "X-API-Version": {
+                    "description": "API version",
+                    "type": "string"
+                },
+                "Server": {
+                    "description": "API title",
+                    "type": "string"
+                }
+            }
+        },
+        "400": {
+            "$ref": "#/responses/BadRequest"
+        },
+        "401": {
+            "$ref": "#/responses/NotAuthenticated"
+        },
+        "403": {
+            "$ref": "#/responses/Forbidden"
+        },
+        "404": {
+            "$ref": "#/responses/NotFound"
+        },
+        "default": {
+            "$ref": "#/responses/Unexpected"
+        }
+    }
+}

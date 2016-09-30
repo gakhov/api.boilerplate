@@ -76,3 +76,7 @@ supervisord.pid
 /src/
 *.pdf
 pip-selfcheck.json
+
+# API
+/documentation/html
+/documentation/swagger/schema

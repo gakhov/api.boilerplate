@@ -69,6 +69,9 @@ def deploy(branch=None, subdir=None):
         else:
             run("all-tests")
 
+        run("docs")
+        run("swagger")
+
     # Stop the current running version
     with settings(warn_only=True):
         supervisor("shutdown", subdir=subdir)

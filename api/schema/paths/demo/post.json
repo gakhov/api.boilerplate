@@ -1,0 +1,74 @@
+{
+    "summary": "Create a new document",
+    "description": "Create a new document",
+    "operationId": "createDocument",
+    "produces": [
+        "application/json"
+    ],
+    "parameters": [
+        {
+            "name": "body",
+            "in": "body",
+            "schema": {
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Text of the document."
+                    }
+                }
+            }
+        }
+    ],
+    "security": [
+        {
+            "access_token": []
+        }
+    ],
+    "tags": [
+        "demo"
+    ],
+    "responses": {
+        "200": {
+            "description": "Document has been created",
+            "schema": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Internal Document ID."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Creation date of the Document."
+                    }
+                },
+                "required": [
+                    "id",
+                    "created_at"
+                ]
+            },
+            "headers": {
+                "X-API-Version": {
+                    "description": "API version",
+                    "type": "string"
+                },
+                "Server": {
+                    "description": "API title",
+                    "type": "string"
+                }
+            }
+        },
+        "400": {
+            "$ref": "#/responses/BadRequest"
+        },
+        "401": {
+            "$ref": "#/responses/NotAuthenticated"
+        },
+        "403": {
+            "$ref": "#/responses/Forbidden"
+        },
+        "default": {
+            "$ref": "#/responses/Unexpected"
+        }
+    }
+}

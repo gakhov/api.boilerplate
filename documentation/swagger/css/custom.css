@@ -1,0 +1,19 @@
+.swagger-section #header {
+  background-color: #2a2a2a;
+  padding: 14px;
+  min-height: 40px;
+}
+
+.swagger-section #header a {
+    line-height: 2em;
+}
+
+.swagger-section #header a.swagger-ui-download-raw {
+    width: 70px;
+    float: right;
+    display: block;
+    padding: 5px 10px;
+    background: #006600;
+    margin: 0 2px;
+    text-align: center
+}

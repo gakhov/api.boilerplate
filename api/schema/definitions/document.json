@@ -1,0 +1,27 @@
+{
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Internal document's ID."
+        },
+        "text": {
+            "type": "string",
+            "description": "Text of the document."
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Creation date of the document."
+        },
+        "updated_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Update date of the document."
+        }
+    },
+    "required": [
+        "created_at",
+        "id",
+        "text"
+    ]
+}

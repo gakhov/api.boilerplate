@@ -1,0 +1,55 @@
+{
+    "summary": "Get a document",
+    "description": "Retrieve the document by its ID",
+    "operationId": "getDocument",
+    "parameters": [
+        {
+            "name": "id",
+            "in": "path",
+            "description": "Document ID.",
+            "required": true,
+            "type": "string"
+        }
+    ],
+    "security": [
+        {
+            "access_token": []
+        }
+    ],
+    "tags": [
+        "demo"
+    ],
+    "responses": {
+        "200": {
+            "description": "Document object",
+            "schema": {
+                "$ref": "#/definitions/Document"
+            },
+            "headers": {
+                "X-API-Version": {
+                    "description": "API version",
+                    "type": "string"
+                },
+                "Server": {
+                    "description": "API title",
+                    "type": "string"
+                }
+            }
+        },
+        "400": {
+            "$ref": "#/responses/BadRequest"
+        },
+        "401": {
+            "$ref": "#/responses/NotAuthenticated"
+        },
+        "403": {
+            "$ref": "#/responses/Forbidden"
+        },
+        "404": {
+            "$ref": "#/responses/NotFound"
+        },
+        "default": {
+            "$ref": "#/responses/Unexpected"
+        }
+    }
+}
