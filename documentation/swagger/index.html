@@ -86,6 +86,7 @@
         window.SwaggerTranslator.translate();
       }
 
+      JsonRefs.clearCache();
       getResolvedSchema(url, false, function(json){
           window.swaggerUi = new SwaggerUi({
             spec: json,
