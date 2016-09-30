@@ -25,6 +25,8 @@ setup(
             "pytest-cov==2.3.0",
             "pytest-pep8==1.0.6",
             "mock==2.0.0",
+            "sphinx==1.4.5",
+            "fabric==1.12.0",
         ],
     ),
     install_requires=[

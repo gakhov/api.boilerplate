@@ -9,7 +9,7 @@ bin/python:
 	bin/pip install --upgrade setuptools
 	bin/pip install --upgrade pip
 	bin/pip install wheel
-	bin/pip install --use-wheel pycrypto sphinx==1.4.5 fabric==1.12.0
+	bin/pip install --use-wheel pycrypto
 
 bin/buildout: bin/python
 	bin/python bootstrap.py -v 2.5.1
@@ -43,6 +43,7 @@ docs:
 	@echo "Build finished. The HTML pages are in documentation."
 
 swagger:
+	rm -rf documentation/swagger/schema
 	cp -r api/schema documentation/swagger/schema
 	@echo
 	@echo "Swagger schema has been copied to documentation."
