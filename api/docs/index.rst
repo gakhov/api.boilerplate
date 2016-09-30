@@ -13,7 +13,7 @@ API Boilerplate
 
 .. note::
 
-    Detailed specifications for endpoints could be found in the Swagger_ schema.
+    Detailed specifications for endpoints could be found in the Swagger schema.
 
 
 Quick Start
@@ -46,5 +46,3 @@ Index
 * :ref:`modindex`
 * :ref:`search`
 
-
-.. _Swagger: /schema/
