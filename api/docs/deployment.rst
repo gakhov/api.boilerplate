@@ -120,7 +120,7 @@ API for `production` environment (``API_ENV=production``) could be deployed from
 
 .. warning::
 
-    It's not recommended to make any changes or run additional processes without changing :file:`etc/supervisord.conf.template` and re-deploying the application.
+    It's not recommended to make any changes or run additional processes without changing :file:`etc/production/supervisord.conf.template` and re-deploying the application.
 
 
 .. note::
