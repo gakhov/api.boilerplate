@@ -31,8 +31,13 @@ class RequestHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
 
         def get_exc_message(exception):
-            return exception.log_message if \
-                hasattr(exception, "log_message") else str(exception)
+            if hasattr(exception, "details") and exception.details:
+                return exception.details
+            if hasattr(exception, "log_message") and exception.log_message:
+                return exception.log_message
+            if hasattr(exception, "message") and exception.message:
+                return exception.message
+            return str(exception)
 
         self.clear()
         self.set_status(status_code)
@@ -93,4 +98,5 @@ class DeprecatedHandler(RequestHandler):
 
 class ErrorHandler(tornado.web.ErrorHandler, RequestHandler):
     """Default handler in case of 404 error."""
+
     pass

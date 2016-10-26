@@ -6,9 +6,9 @@ from tornado.web import HTTPError
 class APIError(HTTPError):
     """General API Error."""
 
-    def __init__(self, status_code, message=None, log_message=None):
+    def __init__(self, status_code, message=None, details=None):
         super(APIError, self).__init__(status_code, message)
-        self.log_message = log_message
+        self.details = details
 
 
 class APIClientError(APIError):
