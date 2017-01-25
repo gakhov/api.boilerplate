@@ -25,7 +25,7 @@ Afterwards you need to add your remote to the git repository to be able commit y
 .. code-block:: bash
 
     $ git remote rename origin boilerplate
-    $ git remote add origin https://github.com/user/{your_repo}.git
+    $ git remote add origin https://github.com/{user}/{your_repo}.git
 
 
 Documentation
