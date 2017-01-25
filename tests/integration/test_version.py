@@ -32,7 +32,15 @@ class TestServerVersionIntegration(AsyncHTTPTestCase):
             method="GET",
             headers={"Content-Type": "application/json"})
         self.assertEqual(response.code, 200)
-        self.assertEqual(json.loads(response.body), expected)
+
+        json_response = json.loads(response.body)
+
+        self.assertIn("endpoints", json_response)
+        self.assertIn("document", json_response['endpoints'])
+
+        for key, value in expected.items():
+            self.assertIn(key, json_response)
+            self.assertEqual(json_response[key], value)
 
     def test_version_post(self):
         url = "/_version"
