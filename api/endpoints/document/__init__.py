@@ -25,6 +25,7 @@ class Endpoint(BaseEndpoint):
     """Base class for /document endpoint namespace."""
 
     name = 'document'
+    version = '1.0.0'
 
     def __init__(self, settings):
         self._settings = settings

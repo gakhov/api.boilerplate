@@ -28,12 +28,13 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/", WelcomeHandler, dict(version=settings["api_version"])),
             (r"/_health", HealthHandler, dict(settings=settings)),
-            (r"/_version", VersionHandler, dict(settings=settings)),
         ]
 
+        endpoint_versions = {}
         for name in self._endpoints:
             module = resolve_name("api.endpoints." + name)
             endpoint = getattr(module, "Endpoint").from_settings(settings)
+            endpoint_versions[endpoint.name] = endpoint.version
 
             endpoint_handlers = getattr(module, "ENDPOINT_HANDLERS")
             handlers.extend(
@@ -44,6 +45,11 @@ class Application(tornado.web.Application):
                     settings["deprecated_api_versions"],
                     DeprecatedHandler)
             )
+
+        handlers += [
+            (r"/_version", VersionHandler, dict(
+                settings=settings, endpoint_versions=endpoint_versions)),
+        ]
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -71,14 +77,18 @@ class HealthHandler(RequestHandler):
 class VersionHandler(RequestHandler):
     """Provide current running version."""
 
-    def initialize(self, settings):
+    def initialize(self, settings, endpoint_versions):
         self._settings = settings
+        self._endpoint_versions = endpoint_versions
 
     def get(self):
-        self.send_json({
+        response = {
             "version": self._settings["api_version"],
-            "build": __version__
-        })
+            "build": __version__,
+            "endpoints": self._endpoint_versions
+        }
+
+        self.send_json(response)
         self.finish()
 
 

@@ -47,6 +47,14 @@
                     "description": "API version",
                     "type": "string"
                 },
+                "X-Endpoint-Name": {
+                    "description": "Endpoint name",
+                    "type": "string"
+                },
+                "X-Endpoint-Version": {
+                    "description": "Endpoint Version",
+                    "type": "string"
+                },
                 "Server": {
                     "description": "API title",
                     "type": "string"
