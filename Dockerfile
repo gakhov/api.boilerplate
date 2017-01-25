@@ -24,7 +24,7 @@ RUN set -x \
         build-essential \
         ca-certificates \
         make \
-        python-dev \
+        python3-dev \
         python-virtualenv \
         software-properties-common \
         virtualenv \
@@ -54,7 +54,7 @@ WORKDIR /api
 
 RUN make clean \
     && make \
-    && bin/buildout -c $API_ENV.cfg \
+    && make install \
     && make all-tests
 
 USER root
