@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import json
 import pytest
 
+from tornado.escape import json_decode
 from tornado.ioloop import IOLoop
 from tornado.testing import AsyncHTTPTestCase
 
@@ -30,7 +30,7 @@ class TestServerHealthIntegration(AsyncHTTPTestCase):
             method="GET",
             headers={"Content-Type": "application/json"})
         self.assertEqual(response.code, 200)
-        self.assertEqual(json.loads(response.body), expected)
+        self.assertEqual(json_decode(response.body), expected)
 
     def test_health_post(self):
         url = "/_health"

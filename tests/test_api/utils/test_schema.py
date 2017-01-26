@@ -43,11 +43,13 @@ class TestUtilsSchema(unittest.TestCase):
         }
         expected = {
             "test": [1, ],
-            "tests": [1, 2, 3, 1, 2]
+            "tests": [1, 2, 1, 2, 3]
         }
 
         renamed = _rename_qs_fields(qs)
-        self.assertEqual(renamed, expected)
+        self.assertEqual(sorted(renamed.keys()), sorted(expected.keys()))
+        self.assertEqual(sorted(renamed["test"]), sorted(expected["test"]))
+        self.assertEqual(sorted(renamed["tests"]), sorted(expected["tests"]))
 
     def test_simplify_qs_values(self):
         qs = {
