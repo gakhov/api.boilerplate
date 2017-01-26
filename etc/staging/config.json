@@ -1,0 +1,5 @@
+{
+    "environment": {
+        "API_ENV": "staging"
+    }
+}

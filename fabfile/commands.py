@@ -2,6 +2,7 @@ from datetime import datetime
 import os.path
 
 from fabric.api import abort, cd, env, run, settings
+from fabric.context_managers import shell_env
 
 from .helpers import supervisor
 
@@ -61,19 +62,20 @@ def deploy(branch=None, subdir=None):
         build_dir = os.path.join(new_version_dir, subdir)
 
     with cd(build_dir):
-        run("cp etc/{}/supervisord.conf.template supervisord.conf".format(
-            env.env_type))
+        with shell_env(**env.config.get("environment", {})):
+            run("cp etc/{}/supervisord.conf.template supervisord.conf".format(
+                env.env_type))
 
-        run("make")
-        if env.env_type == "testing":
-            run("make develop")
-            run("make test")
-        else:
-            run("make install")
-            run("all-tests")
+            run("make")
+            if env.env_type == "testing":
+                run("make develop")
+                run("make test")
+            else:
+                run("make install")
+                run("all-tests")
 
-        run("docs")
-        run("swagger")
+            run("docs")
+            run("swagger")
 
     # Stop the current running version
     with settings(warn_only=True):

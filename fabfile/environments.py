@@ -22,6 +22,13 @@ def testing():
     env.port = config["testing"]["port"]
     env.git_branch = config["testing"]["gitbranch"]
 
+    env.config = {}
+    try:
+        with open("etc/testing/config.json") as f:
+            env.config = json.load(f)
+    except IOError:
+        pass
+
 
 def staging():
     """Staging environment."""
@@ -37,6 +44,13 @@ def staging():
     env.port = config["staging"]["port"]
     env.git_branch = config["staging"]["gitbranch"]
 
+    env.config = {}
+    try:
+        with open("etc/staging/config.json") as f:
+            env.config = json.load(f)
+    except IOError:
+        pass
+
 
 def production():
     """Production environment."""
@@ -51,3 +65,10 @@ def production():
     env.user = config["production"]["user"]
     env.port = config["production"]["port"]
     env.git_tag = config["production"]["gittag"]
+
+    env.config = {}
+    try:
+        with open("etc/production/config.json") as f:
+            env.config = json.load(f)
+    except IOError:
+        pass
