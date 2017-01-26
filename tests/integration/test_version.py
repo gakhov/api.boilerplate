@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import json
 import pytest
 
+from tornado.escape import json_decode
 from tornado.ioloop import IOLoop
 from tornado.testing import AsyncHTTPTestCase
 
@@ -33,7 +33,7 @@ class TestServerVersionIntegration(AsyncHTTPTestCase):
             headers={"Content-Type": "application/json"})
         self.assertEqual(response.code, 200)
 
-        json_response = json.loads(response.body)
+        json_response = json_decode(response.body)
 
         self.assertIn("endpoints", json_response)
         self.assertIn("document", json_response['endpoints'])

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 from functools import wraps
 
 __all__ = [
@@ -21,7 +19,7 @@ def canonicalize(item):
         return item
 
     output = []
-    for key, value in item.iteritems():
+    for key, value in item.items():
         canonical_value = canonicalize(value)
         if canonical_value in (None, [], {}, ''):
             continue

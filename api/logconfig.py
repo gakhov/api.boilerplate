@@ -1,7 +1,6 @@
 """An extended version of the log_settings module from zamboni:
 https://github.com/jbalogh/zamboni/blob/master/log_settings.py
 """
-from __future__ import absolute_import
 
 import logging
 import logging.handlers
@@ -23,8 +22,7 @@ class RemoteAddressFormatter(logging.Formatter):
 
 
 class UTF8SafeFormatter(RemoteAddressFormatter):
-    """UTF-8 formatter with REMOTE_ADDR support
-    """
+    """UTF-8 formatter with REMOTE_ADDR support."""
     def __init__(self, fmt=None, datefmt=None, encoding='utf-8'):
         logging.Formatter.__init__(self, fmt, datefmt)
         self.encoding = encoding
@@ -43,8 +41,7 @@ class UTF8SafeFormatter(RemoteAddressFormatter):
 
 
 class NullHandler(logging.Handler):
-    """NULL logging handler
-    """
+    """NULL logging handler."""
     def emit(self, record):
         pass
 

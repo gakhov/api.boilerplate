@@ -8,7 +8,7 @@ import tornado.gen
 
 from functools import partial, wraps
 from tornado.concurrent import is_future
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 
 from ..exceptions import APIClientError, APIServerError
 from . import container
@@ -57,7 +57,7 @@ def _rename_qs_fields(params):
     e.g.: fields[] -> fields
     """
     renamed = {}
-    for key, values in params.iteritems():
+    for key, values in params.items():
         if key.endswith("[]"):
             key = key[:-2]
         if key in renamed:
@@ -71,22 +71,22 @@ def _simplify_qs_values(params, encoding="UTF-8"):
     """Simplify query_string params from lists."""
     simplified = {}
     parse_value = partial(_parse_qs_value, encoding=encoding)
-    for key, values in params.iteritems():
+    for key, values in params.items():
         if key.endswith("s") and not key.endswith("ss"):
             if isinstance(values, list) and len(values) == 1:
                 values = values[0]
-            if isinstance(values, basestring) and "," not in values:
+            if isinstance(values, str) and "," not in values:
                 simplified[key] = parse_value(values)
                 continue
-            if isinstance(values, basestring) and "," in values:
+            if isinstance(values, str) and "," in values:
                 values = values.strip(",").split(",")
-            simplified[key] = map(parse_value, values)
+            simplified[key] = list(map(parse_value, values))
             continue
         elif isinstance(values, list) and len(values) > 1:
-            simplified[key] = map(parse_value, values)
+            simplified[key] = list(map(parse_value, values))
             continue
         elif key.endswith("[]"):
-            simplified[key] = map(parse_value, values)
+            simplified[key] = list(map(parse_value, values))
             continue
         simplified[key] = parse_value(values[0])
     return simplified
