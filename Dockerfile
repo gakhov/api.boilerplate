@@ -52,6 +52,8 @@ USER api
 COPY . /api
 WORKDIR /api
 
+RUN copy etc/$API_ENV/supervisord.conf.template supervisord.conf
+
 RUN make clean \
     && make \
     && make install \
