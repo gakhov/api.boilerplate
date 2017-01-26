@@ -1,7 +1,10 @@
 from datetime import datetime
 import os.path
+import shutil
+import tempfile
 
-from fabric.api import abort, cd, env, run, settings
+from fabric.api import abort, cd, env, run, settings, local, lcd
+from fabric.contrib.project import rsync_project
 from fabric.context_managers import shell_env
 
 from .helpers import supervisor
@@ -20,6 +23,12 @@ def _is_version(path):
     return False
 
 
+def _kill_zombies(env, appname):
+    """Kill unstopped processes."""
+    run("kill $(ps aux | grep '{}/{}' | pgrep 'bin/start_server')".format(
+        env, appname))
+
+
 def deploy(branch=None, subdir=None):
     """Deploy the backend and start supervisor.
 
@@ -32,30 +41,44 @@ def deploy(branch=None, subdir=None):
     """
     new_version_dir = "%s/%s" % (env.releases,
                                  datetime.now().strftime(VERSION_DIR_FORMAT))
-    run("mkdir -p %s" % new_version_dir)
+
+    # decide where we should clone the project
+    if not env.clone:
+        _run, _cd, _dir = local, lcd, tempfile.mkdtemp()
+    else:
+        _run, _cd, _dir = run, cd, new_version_dir
 
     # prepare or updated the cached copy
-    run("git clone %s %s" % (env.git_url, new_version_dir))
+    _run("git clone %s %s" % (env.git_url, _dir))
 
     # based on the environment we deploy a certain branch/tag from git
-    with cd(new_version_dir):
+    with _cd(_dir):
         if env.env_type == "testing":
             git_branch = branch or env.git_branch
             if not git_branch:
                 abort("In 'testing' environment only branches to be deployed")
             if git_branch != "master":
-                run("git checkout -b {branch} origin/{branch}".format(
+                _run("git checkout -b {branch} origin/{branch}".format(
                     branch=git_branch))
         elif env.env_type == "staging":
             if not env.git_branch:
                 abort("In 'staging' environment only branches to be deployed")
             if env.git_branch != "master":
-                run("git checkout -b %(git_branch)s origin/%(git_branch)s" %
-                    env)
+                _run("git checkout -b %(git_branch)s origin/%(git_branch)s" %
+                     env)
         elif env.env_type == "production":
             if not env.git_tag:
                 abort("In 'production' environment only tags to be deployed")
-            run("git checkout -b tag-%(git_tag)s %(git_tag)s" % env)
+            _run("git checkout -b tag-%(git_tag)s %(git_tag)s" % env)
+
+    run("mkdir -p %s" % new_version_dir)
+
+    if not env.clone:
+        rsync_project(
+            local_dir="{}/*".format(_dir),
+            remote_dir=new_version_dir,
+            exclude='.git')
+        shutil.rmtree(_dir)
 
     build_dir = new_version_dir
     if subdir:
@@ -80,6 +103,7 @@ def deploy(branch=None, subdir=None):
     # Stop the current running version
     with settings(warn_only=True):
         supervisor("shutdown", subdir=subdir)
+        _kill_zombies(env.env_type, env.appname)
 
     # reset the `current` link to the new version
     with cd(env.base_dir):
@@ -89,7 +113,7 @@ def deploy(branch=None, subdir=None):
     with cd(build_dir):
         run("bin/supervisord && sleep 1")
 
-    cleanup(max_to_keep=5)
+    cleanup("releases", max_to_keep=5)
 
 
 def rollback():
@@ -106,7 +130,7 @@ def rollback():
         # stop the `current` version
         with settings(warn_only=True):
             supervisor("shutdown")
-
+            _kill_zombies(env.env_type, env.appname)
         # install the `old` version
         with cd(env.base_dir):
             run("rm current && ln -s %s/%s current" % (env.releases,
@@ -117,9 +141,9 @@ def rollback():
             run("bin/supervisord && sleep 1")
 
 
-def cleanup(max_to_keep=5):
+def cleanup(type_="releases", max_to_keep=5):
     """Keep only max_to_keep newest versions."""
-    dir_ = os.path.join(env.releases, "")
+    dir_ = os.path.join(getattr(env, type_), "")
     string_ = run("for i in %s*; do echo $i; done" % dir_)
     candidates = string_.replace("\r", "").split("\n")
     if len(candidates) <= max_to_keep:

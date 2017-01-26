@@ -21,6 +21,7 @@ def testing():
     env.user = config["testing"]["user"]
     env.port = config["testing"]["port"]
     env.git_branch = config["testing"]["gitbranch"]
+    env.clone = config["testing"].get("clone")
 
     env.config = {}
     try:
@@ -43,6 +44,7 @@ def staging():
     env.user = config["staging"]["user"]
     env.port = config["staging"]["port"]
     env.git_branch = config["staging"]["gitbranch"]
+    env.clone = config["staging"].get("clone")
 
     env.config = {}
     try:
@@ -65,6 +67,7 @@ def production():
     env.user = config["production"]["user"]
     env.port = config["production"]["port"]
     env.git_tag = config["production"]["gittag"]
+    env.clone = config["production"].get("clone")
 
     env.config = {}
     try:

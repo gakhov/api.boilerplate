@@ -8,20 +8,23 @@
     "user": "deploy",
     "port": 37875,
     "basedir": "/home/{0[testing][user]}/api/testing/{0[deploy][appname]}",
-    "gitbranch": "master"
+    "gitbranch": "master",
+    "clone": true
   },
   "staging": {
     "server": ["staging.example.com"],
     "user": "deploy",
     "port": 37875,
     "basedir": "/home/{0[staging][user]}/api/staging/{0[deploy][appname]}",
-    "gitbranch": "0.1.0-rc1"
+    "gitbranch": "0.1.0-rc1",
+    "clone": false
   },
   "production": {
     "server": ["prod01.example.com", "prod02.example.com"],
     "user": "deploy",
     "port": 37875,
     "basedir": "/home/{0[production][user]}/api/production/{0[deploy][appname]}",
-    "gittag": "0.1.0"
+    "gittag": "0.1.0",
+    "clone": false
   }
 }
