@@ -35,7 +35,7 @@ For the `local` environment setup is a simple consequence of the following steps
 ::
 
     make
-    bin/buildout -c buildout.cfg
+    make develop
 
 To start the `server` instance that will serve all supported endpoints.
 

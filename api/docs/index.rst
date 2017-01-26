@@ -34,6 +34,7 @@ Table of Contents
     start
     settings
     deployment
+    versioning
     dependencies
     testing
     source/modules
