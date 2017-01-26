@@ -6,7 +6,7 @@ from tornado.escape import json_decode
 from tornado.ioloop import IOLoop
 from tornado.testing import AsyncHTTPTestCase
 
-from api import __version__
+from api import __api__, __version__
 from api.settings import settings
 from api.server import Application as ServerApplication
 
@@ -23,8 +23,8 @@ class TestServerWelcomeIntegration(AsyncHTTPTestCase):
     def test_welcome_get(self):
         url = "/".format(settings["api_version"])
         expected = {
-            "welcome": "API: version {} (build {}).".format(
-                settings["api_version"], __version__)
+            "welcome": "API: v{} (build {}).".format(
+                __api__, __version__)
         }
 
         response = self.fetch(

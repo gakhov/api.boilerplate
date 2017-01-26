@@ -5,7 +5,7 @@ import tornado.web
 
 from tornado.escape import json_encode
 
-from . import __version__
+from . import __api__, __version__
 from .exceptions import APIError
 
 
@@ -22,7 +22,8 @@ class RequestHandler(tornado.web.RequestHandler):
     """Extention of the tornado"s RequestHandler with helpers."""
 
     def set_default_headers(self):
-        self.set_header("X-API-Version", __version__)
+        self.set_header("X-Api-Version", "v{}".format(__api__))
+        self.set_header("X-Api-Build", __version__)
         self.set_header("Server", "API")
         self.set_header("Content-Type", "application/json")
 

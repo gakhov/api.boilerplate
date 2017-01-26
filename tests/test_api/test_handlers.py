@@ -5,7 +5,7 @@ import unittest.mock as mock
 
 from tornado.web import HTTPError
 
-from api.version import __version__
+from api.version import __api__, __version__
 from api.exceptions import APIError
 from api.handlers import RequestHandler, DeprecatedHandler
 
@@ -37,7 +37,9 @@ class TestRequestHandler(unittest.TestCase):
     def test_set_default_headers(self):
         self._rh.set_default_headers()
         self._rh.set_header.assert_any_call(
-            "X-API-Version", __version__)
+            "X-Api-Version", "v{}".format(__api__))
+        self._rh.set_header.assert_any_call(
+            "X-Api-Build", __version__)
         self._rh.set_header.assert_any_call(
             "Server", "API")
         self._rh.set_header.assert_any_call(

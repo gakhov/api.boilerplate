@@ -6,7 +6,7 @@ import tornado.web
 from tornado.concurrent import futures
 
 
-from .. import __version__
+from .. import __api__, __version__
 from ..exceptions import APIServerError
 from ..handlers import RequestHandler, DeprecatedHandler
 from ..utils.ops import resolve_name, build_versioned_handlers
@@ -25,7 +25,7 @@ class Application(tornado.web.Application):
             settings["redis"]["url"])
 
         handlers = [
-            (r"/", WelcomeHandler, dict(version=settings["api_version"])),
+            (r"/", WelcomeHandler),
             (r"/_health", HealthHandler, dict(settings=settings)),
         ]
 
@@ -46,8 +46,7 @@ class Application(tornado.web.Application):
             )
 
         handlers += [
-            (r"/_version", VersionHandler, dict(
-                settings=settings, endpoint_versions=endpoint_versions)),
+            (r"/_version", VersionHandler, dict(endpoints=endpoint_versions)),
         ]
 
         tornado.web.Application.__init__(self, handlers, **settings)
@@ -76,15 +75,14 @@ class HealthHandler(RequestHandler):
 class VersionHandler(RequestHandler):
     """Provide current running version."""
 
-    def initialize(self, settings, endpoint_versions):
-        self._settings = settings
-        self._endpoint_versions = endpoint_versions
+    def initialize(self, endpoints):
+        self._endpoints = endpoints
 
     def get(self):
         response = {
-            "version": self._settings["api_version"],
+            "version": "v{}".format(__api__),
             "build": __version__,
-            "endpoints": self._endpoint_versions
+            "endpoints": self._endpoints
         }
 
         self.send_json(response)
@@ -94,12 +92,9 @@ class VersionHandler(RequestHandler):
 class WelcomeHandler(RequestHandler):
     """Welcome noop handler."""
 
-    def initialize(self, version):
-        self.version = version
-
     def get(self):
         self.send_json({
-            "welcome": "API: version {} (build {}).".format(
-                self.version, __version__)
+            "welcome": "API: v{} (build {}).".format(
+                __api__, __version__)
         })
         self.finish()

@@ -49,8 +49,8 @@ class BaseEndpointHandler(RequestHandler):
     def initialize(self, **kwargs):
         assert "endpoint" in kwargs, "Missing endpoint"
         self.endpoint = kwargs["endpoint"]
-        self.add_header("X-Endpoint-Name", self.endpoint.name)
-        self.add_header("X-Endpoint-Version", self.endpoint.version)
+        self.set_header("X-Endpoint-Name", self.endpoint.name)
+        self.set_header("X-Endpoint-Version", self.endpoint.version)
 
     @authenticated()
     @tornado.gen.coroutine

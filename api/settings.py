@@ -3,8 +3,9 @@
 import logging
 import os
 
-from .logconfig import initialize_logging
 from .handlers import ErrorHandler
+from .logconfig import initialize_logging
+from .version import __api__, __version__
 
 
 class EnvironmentType:
@@ -50,7 +51,8 @@ settings["concurrency"] = {
     "threads": 2
 }
 
-settings["api_version"] = "1"
+settings["version"] = __version__
+settings["api_version"] = __api__
 settings["deprecated_api_versions"] = []
 
 
