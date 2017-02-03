@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import redis
-import tornado.web
-
 from tornado.concurrent import futures
-
+import tornado.web
 
 from .. import __api__, __version__
 from ..exceptions import APIServerError
@@ -12,12 +10,27 @@ from ..handlers import RequestHandler, DeprecatedHandler
 from ..utils.ops import resolve_name, build_versioned_handlers
 
 
+def _get_endpoints(endpoints, settings):
+    registered = set(settings["registered_endpoints"])
+    if endpoints is None:
+        enabled = registered
+    else:
+        enabled = set(endpoints)
+
+    unsupported = enabled - registered
+    if unsupported:
+        raise ValueError(
+            "Unsupported endpoints: {}".format(", ".join(unsupported)))
+
+    return enabled
+
+
 class Application(tornado.web.Application):
     """Default server application."""
 
-    def __init__(self, **settings):
+    def __init__(self, endpoints=None, **settings):
         self._settings = settings
-        self._endpoints = self._settings["registered_endpoints"]
+        self._endpoints = _get_endpoints(endpoints, settings)
 
         self._executor = futures.ThreadPoolExecutor(
             settings["concurrency"].get("threads", 1))

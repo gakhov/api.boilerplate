@@ -2,10 +2,7 @@
 
 import tornado.gen
 
-from ..base import (
-    BaseEndpoint,
-    BaseEndpointApplication
-)
+from ..base import BaseEndpoint
 
 from .executors import DocumentEndpointExecutor
 from .handlers import (
@@ -60,11 +57,3 @@ class Endpoint(BaseEndpoint):
             test=getattr(request_handler, "__is_test", None))
         result = executor.delete(document_id)
         raise tornado.gen.Return(result)
-
-
-class Application(BaseEndpointApplication):
-    """Main application for /document endpoint namespace."""
-
-    def __init__(self, **settings):
-        super(Application, self).__init__(
-            Endpoint, ENDPOINT_HANDLERS, **settings)

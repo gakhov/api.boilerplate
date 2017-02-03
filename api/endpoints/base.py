@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import redis
 import tornado.web
 
-from tornado.concurrent import futures
-
-from ..handlers import DeprecatedHandler, RequestHandler
+from ..handlers import RequestHandler
 from ..utils.access import authenticated
-from ..utils.ops import build_versioned_handlers
 
 
 class BaseEndpoint(object):
@@ -16,31 +12,6 @@ class BaseEndpoint(object):
     @classmethod
     def from_settings(cls, settings):
         return cls(settings)
-
-
-class BaseEndpointApplication(tornado.web.Application):
-    """Base class for Endpoint Application."""
-
-    def __init__(self, endpoint_cls, endpoint_handlers, **settings):
-        # TODO: initalize clients for DB, ES, etc. here
-        # for available in the case then endpoints executed
-        # without server (standalone)
-        # NOTE: for server case, see api.server.__init__
-
-        self._executor = futures.ThreadPoolExecutor(
-            settings["concurrency"].get("threads", 1))
-        self._redis = redis.StrictRedis.from_url(
-            settings["redis"]["url"])
-
-        endpoint = endpoint_cls.from_settings(settings)
-        handlers = build_versioned_handlers(
-            endpoint,
-            endpoint_handlers,
-            settings["api_version"],
-            settings["deprecated_api_versions"],
-            DeprecatedHandler)
-
-        tornado.web.Application.__init__(self, handlers, **settings)
 
 
 class BaseEndpointHandler(RequestHandler):

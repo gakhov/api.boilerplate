@@ -4,7 +4,6 @@ import re
 
 __all__ = [
     'build_versioned_handlers',
-    'get_endpoint_app',
     'resolve_name'
 ]
 
@@ -67,12 +66,6 @@ def build_versioned_handlers(endpoint, handlers, active_version,
                     (deprecated_path, deprecated_handler)
                 )
     return versioned
-
-
-def get_endpoint_app(name):
-    """Return Application class for the endpoint."""
-    module = resolve_name('api.endpoints.' + name)
-    return getattr(module, 'Application')
 
 
 def resolve_name(name):
