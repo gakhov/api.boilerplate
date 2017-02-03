@@ -1,34 +1,19 @@
 # -*- encoding: utf-8 -*-
 import unittest
+from unittest.mock import MagicMock
 
 from api.utils.ops import (
-    _is_versioned_path,
     build_versioned_handlers,
     resolve_name
 )
 
 
 class TestUtilsOps(unittest.TestCase):
-    def test_is_versioned_path(self):
-        path = "/v1/test"
-
-        is_versioned = _is_versioned_path(path)
-        self.assertTrue(is_versioned)
-
-    def test_is_versioned_path_not_versioned(self):
-        path = "/test"
-
-        is_versioned = _is_versioned_path(path)
-        self.assertFalse(is_versioned)
-
-    def test_is_versioned_path_almost_versioned(self):
-        path = "/vq/test"
-
-        is_versioned = _is_versioned_path(path)
-        self.assertFalse(is_versioned)
 
     def test_build_versioned_handlers(self):
-        handlers = [
+        endpoint = MagicMock()
+        endpoint.name = "foobar"
+        endpoint.handlers = [
             ("/test0", "TEST0"),
             ("/test1", "TEST1"),
         ]
@@ -36,22 +21,23 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0", {"endpoint": None}),
-            ("/v2/test1", "TEST1", {"endpoint": None}),
-            ("/v1/test0", "DEPRECATED"),
-            ("/v1/test1", "DEPRECATED"),
+            ("/v2/foobar/test0", "TEST0", {"endpoint": endpoint}),
+            ("/v2/foobar/test1", "TEST1", {"endpoint": endpoint}),
+            ("/v1/foobar/test0", "DEPRECATED"),
+            ("/v1/foobar/test1", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
-            None,
-            handlers,
+            endpoint,
             active_version,
             deprecated_versions,
             deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_build_versioned_handlers_long_handler(self):
-        handlers = [
+        endpoint = MagicMock()
+        endpoint.name = "foobar"
+        endpoint.handlers = [
             ("/test0", "TEST0", {"ADDITIONAL": True}),
             ("/test1", "TEST1"),
         ]
@@ -59,22 +45,24 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0", {"ADDITIONAL": True, "endpoint": None}),
-            ("/v2/test1", "TEST1", {"endpoint": None}),
-            ("/v1/test0", "DEPRECATED"),
-            ("/v1/test1", "DEPRECATED"),
+            ("/v2/foobar/test0", "TEST0", {"ADDITIONAL": True,
+                                           "endpoint": endpoint}),
+            ("/v2/foobar/test1", "TEST1", {"endpoint": endpoint}),
+            ("/v1/foobar/test0", "DEPRECATED"),
+            ("/v1/foobar/test1", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
-            None,
-            handlers,
+            endpoint,
             active_version,
             deprecated_versions,
             deprecated_handler)
         self.assertEqual(versioned, expected)
 
     def test_build_versioned_handlers_no_deprecated(self):
-        handlers = [
+        endpoint = MagicMock()
+        endpoint.name = "foobar"
+        endpoint.handlers = [
             ("/test0", "TEST0"),
             ("/test1", "TEST1"),
         ]
@@ -82,35 +70,12 @@ class TestUtilsOps(unittest.TestCase):
         deprecated_versions = []
         deprecated_handler = "DEPRECATED"
         expected = [
-            ("/v2/test0", "TEST0", {"endpoint": None}),
-            ("/v2/test1", "TEST1", {"endpoint": None}),
+            ("/v2/foobar/test0", "TEST0", {"endpoint": endpoint}),
+            ("/v2/foobar/test1", "TEST1", {"endpoint": endpoint}),
         ]
 
         versioned = build_versioned_handlers(
-            None,
-            handlers,
-            active_version,
-            deprecated_versions,
-            deprecated_handler)
-        self.assertEqual(versioned, expected)
-
-    def test_build_versioned_handlers_not_override_deprecated(self):
-        handlers = [
-            ("/test0", "TEST0"),
-            ("/v1/test1", "TEST1"),
-        ]
-        active_version = '2'
-        deprecated_versions = ['1']
-        deprecated_handler = "DEPRECATED"
-        expected = [
-            ("/v2/test0", "TEST0", {"endpoint": None}),
-            ("/v1/test1", "TEST1", {"endpoint": None}),
-            ("/v1/test0", "DEPRECATED"),
-        ]
-
-        versioned = build_versioned_handlers(
-            None,
-            handlers,
+            endpoint,
             active_version,
             deprecated_versions,
             deprecated_handler)
