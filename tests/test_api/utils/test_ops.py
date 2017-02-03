@@ -4,7 +4,6 @@ import unittest
 from api.utils.ops import (
     _is_versioned_path,
     build_versioned_handlers,
-    get_endpoint_app,
     resolve_name
 )
 
@@ -129,9 +128,3 @@ class TestUtilsOps(unittest.TestCase):
     def test_resolve_name_empty(self):
         with self.assertRaises(ValueError):
             resolve_name("")
-
-    def test_get_endpoint_app(self):
-        name = "document"
-        app = get_endpoint_app(name)
-        self.assertIsNotNone(app)
-        self.assertEqual(app.__name__, "Application")

@@ -42,15 +42,14 @@ To start the `server` instance that will serve all supported endpoints.
 ::
 
     bin/start_server
-    usage: start_server [-h] [--settings SETTINGS] [--name NAME] [--port PORT]
+    usage: start_server [-h] [--name NAME] [--port PORT] [--settings SETTINGS] [--endpoint ENDPOINTS]
 
 
-To start process with the specific `endpoint` only (from the list of registered endpoints):
+To start process with one or more specific `endpoint`s only (from the list of registered endpoints):
 
 ::
 
-    bin/start_endpoint search 5788
-    usage: start_endpoint [-h] [--settings SETTINGS] name port
+    bin/start_server --port 5788 --endpoint issues --endpoint search
 
 
 To generate the documentation:

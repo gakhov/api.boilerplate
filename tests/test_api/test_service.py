@@ -7,7 +7,7 @@ from time import time
 from tornado.testing import get_unused_port
 from unittest import TestCase
 
-from api.start import start_server, start_endpoint
+from api.start import start_server
 
 
 class ServiceTest(TestCase):
@@ -22,6 +22,7 @@ class ServiceTest(TestCase):
         args.name = None
         args.port = get_unused_port()
         args.settings = "{}"
+        args.endpoints = None
         mock_parse_args.return_value = args
 
         start_server()
@@ -36,6 +37,7 @@ class ServiceTest(TestCase):
         args.name = "test"
         args.port = get_unused_port()
         args.settings = "{}"
+        args.endpoints = None
         mock_parse_args.return_value = args
 
         start_server()
@@ -47,12 +49,12 @@ class ServiceTest(TestCase):
         mock_ioloop.current.return_value = mock_ioloop
 
         args = mock.MagicMock()
-        args.name = "document"
         args.port = get_unused_port()
         args.settings = "{}"
+        args.endpoints = ["document"]
         mock_parse_args.return_value = args
 
-        start_endpoint()
+        start_server()
 
     @mock.patch('sys.exit')
     @mock.patch('argparse.ArgumentParser.parse_args')
@@ -63,14 +65,15 @@ class ServiceTest(TestCase):
         mock_ioloop.current.return_value = mock_ioloop
 
         args = mock.MagicMock()
-        args.name = "nonregistered"
         args.port = get_unused_port()
         args.settings = "{}"
+        args.endpoints = ["nonregistered"]
         mock_parse_args.return_value = args
 
         def side_effect(value):
             raise Exception(value)
+
         mock_exit.side_effect = side_effect
 
-        with self.assertRaisesRegexp(Exception, str(errno.EACCES)):
-            start_endpoint()
+        with self.assertRaisesRegexp(Exception, str(errno.EINTR)):
+            start_server()

@@ -24,8 +24,7 @@ setup(
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "start_server = api.start:start_server",
-            "start_endpoint = api.start:start_endpoint",
+            "start_server = api.start:start_server"
         ]
     }
 )
