@@ -19,7 +19,7 @@ class Endpoint(BaseEndpoint):
     @property
     def handlers(self):
         return [
-            (r'/', DocumentCreateHandler),
+            (r'', DocumentCreateHandler),
             (r'/(?P<document_id>[^/]+)', DocumentHandler),
         ]
 
