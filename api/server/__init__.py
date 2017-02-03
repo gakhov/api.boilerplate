@@ -44,15 +44,14 @@ class Application(tornado.web.Application):
 
         endpoint_versions = {}
         for name in self._endpoints:
-            module = resolve_name("api.endpoints." + name)
-            endpoint = getattr(module, "Endpoint").from_settings(settings)
+            endpoint_module = resolve_name("api.endpoints." + name)
+            endpoint_cls = getattr(endpoint_module, "Endpoint")
+            endpoint = endpoint_cls(name, settings)
             endpoint_versions[endpoint.name] = endpoint.version
 
-            endpoint_handlers = getattr(module, "ENDPOINT_HANDLERS")
             handlers.extend(
                 build_versioned_handlers(
                     endpoint,
-                    endpoint_handlers,
                     settings["api_version"],
                     settings["deprecated_api_versions"],
                     DeprecatedHandler)

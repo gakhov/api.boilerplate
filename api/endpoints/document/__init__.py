@@ -11,20 +11,17 @@ from .handlers import (
 )
 
 
-ENDPOINT_HANDLERS = [
-    (r'/document', DocumentCreateHandler),
-    (r'/document/(?P<document_id>[^/]+)', DocumentHandler),
-]
-
-
 class Endpoint(BaseEndpoint):
     """Base class for /document endpoint namespace."""
 
-    name = 'document'
     version = '1.0.0'
 
-    def __init__(self, settings):
-        self._settings = settings
+    @property
+    def handlers(self):
+        return [
+            (r'/', DocumentCreateHandler),
+            (r'/(?P<document_id>[^/]+)', DocumentHandler),
+        ]
 
     @tornado.gen.coroutine
     def get_document(self, request_handler, document_id):

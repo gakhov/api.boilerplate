@@ -1,70 +1,46 @@
 # -*- coding: utf-8 -*-
 
-import re
-
 __all__ = [
     'build_versioned_handlers',
     'resolve_name'
 ]
 
 
-VERSION_RE = re.compile(r'^/v(?P<version>\d+)/')
-
-
-def _is_versioned_path(path):
-    """Check if path contains API version information."""
-    if not path.startswith("/v"):
-        return False
-
-    parsed = VERSION_RE.match(path)
-    return parsed is not None
-
-
-def build_versioned_handlers(endpoint, handlers, active_version,
-                             deprecated_versions, deprecated_handler):
+def build_versioned_handlers(endpoint, active_version, deprecated_versions,
+                             deprecated_handler):
     """Build versioned handlers.
 
     Connect handlers with the specified endpoint and add a special
     deprecated_handler for deprecated API paths.
+
     """
     endpoint_handlers = []
-    for handler in handlers:
+    for handler in endpoint.handlers:
         try:
-            path, cls, settings = handler
+            path, handler_cls, settings = handler
         except ValueError:
-            path, cls = handler
+            path, handler_cls = handler
             settings = {}
 
         settings["endpoint"] = endpoint
-        endpoint_handlers.append(
-            (path, cls, settings)
-        )
+        endpoint_handlers.append((path, handler_cls, settings))
+
+    def make_path(sub_path, version=active_version):
+        return "/v{}/{}{}".format(version, endpoint.name, sub_path)
 
     versioned = []
     for handler in endpoint_handlers:
-        path, cls, settings = handler
+        sub_path, handler_cls, settings = handler
+        versioned.append((make_path(sub_path), handler_cls, settings))
 
-        if _is_versioned_path(path):
-            versioned.append(handler)
-            continue
-
-        versioned.append(
-            ("/v{}{}".format(active_version, path), cls, settings)
-        )
-
-    versioned_paths = set([h[0] for h in versioned])
+    versioned_paths = set([handler[0] for handler in versioned])
     for version in deprecated_versions:
         for handler in endpoint_handlers:
-            path, _, _ = handler
-
-            if _is_versioned_path(path):
-                continue
-
-            deprecated_path = "/v{}{}".format(version, path)
+            sub_path, _, _ = handler
+            deprecated_path = make_path(sub_path, version=version)
             if deprecated_path not in versioned_paths:
-                versioned.append(
-                    (deprecated_path, deprecated_handler)
-                )
+                versioned.append((deprecated_path, deprecated_handler))
+
     return versioned
 
 

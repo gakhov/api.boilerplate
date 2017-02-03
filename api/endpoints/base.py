@@ -9,9 +9,13 @@ from ..utils.access import authenticated
 class BaseEndpoint(object):
     """Base class for Endpoints."""
 
-    @classmethod
-    def from_settings(cls, settings):
-        return cls(settings)
+    def __init__(self, name, settings):
+        self.name = name
+        self.settings = settings
+
+    @property
+    def handlers(self):
+        return []
 
 
 class BaseEndpointHandler(RequestHandler):
