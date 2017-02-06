@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from ..endpoints.base import HealthHandler
+
 __all__ = [
     'build_versioned_handlers',
     'resolve_name'
 ]
+
+_HEALTH_PATH = "/_health"
 
 
 def build_versioned_handlers(endpoint, active_version, deprecated_versions,
@@ -29,6 +33,9 @@ def build_versioned_handlers(endpoint, active_version, deprecated_versions,
         return "/v{}/{}{}".format(version, endpoint.name, sub_path)
 
     versioned = []
+    if endpoint.health_checks:
+        versioned.append((make_path(_HEALTH_PATH), HealthHandler, settings))
+
     for handler in endpoint_handlers:
         sub_path, handler_cls, settings = handler
         versioned.append((make_path(sub_path), handler_cls, settings))
