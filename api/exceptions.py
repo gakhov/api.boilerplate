@@ -21,3 +21,33 @@ class APIServerError(APIError):
     """Server API Error."""
 
     pass
+
+
+class HealthError(Exception):
+
+    def __init__(self, reason, details=None):
+        super(HealthError, self).__init__(reason)
+        self.details = details
+
+    @property
+    def status(self):
+        return "error"
+
+    @property
+    def weight(self):
+        return 2
+
+
+class HealthWarning(Exception):
+
+    def __init__(self, reason, details=None):
+        super(HealthWarning, self).__init__(reason)
+        self.details = details
+
+    @property
+    def status(self):
+        return "warning"
+
+    @property
+    def weight(self):
+        return 1

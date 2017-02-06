@@ -2,6 +2,7 @@
 import unittest
 from unittest.mock import MagicMock
 
+from api.endpoints.base import HealthHandler
 from api.utils.ops import (
     build_versioned_handlers,
     resolve_name
@@ -17,6 +18,7 @@ class TestUtilsOps(unittest.TestCase):
             ("/test0", "TEST0"),
             ("/test1", "TEST1"),
         ]
+        endpoint.health_checks = []
         active_version = '2'
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
@@ -41,6 +43,7 @@ class TestUtilsOps(unittest.TestCase):
             ("/test0", "TEST0", {"ADDITIONAL": True}),
             ("/test1", "TEST1"),
         ]
+        endpoint.health_checks = []
         active_version = '2'
         deprecated_versions = ['1']
         deprecated_handler = "DEPRECATED"
@@ -66,12 +69,39 @@ class TestUtilsOps(unittest.TestCase):
             ("/test0", "TEST0"),
             ("/test1", "TEST1"),
         ]
+        endpoint.health_checks = []
         active_version = '2'
         deprecated_versions = []
         deprecated_handler = "DEPRECATED"
         expected = [
             ("/v2/foobar/test0", "TEST0", {"endpoint": endpoint}),
             ("/v2/foobar/test1", "TEST1", {"endpoint": endpoint}),
+        ]
+
+        versioned = build_versioned_handlers(
+            endpoint,
+            active_version,
+            deprecated_versions,
+            deprecated_handler)
+        self.assertEqual(versioned, expected)
+
+    def test_build_versioned_handlers_with_health(self):
+        endpoint = MagicMock()
+        endpoint.name = "foobar"
+        endpoint.handlers = [
+            ("/test0", "TEST0"),
+            ("/test1", "TEST1"),
+        ]
+        endpoint.health_checks = True  # must evaluate to True
+        active_version = '2'
+        deprecated_versions = ['1']
+        deprecated_handler = "DEPRECATED"
+        expected = [
+            ("/v2/foobar/_health", HealthHandler, {"endpoint": endpoint}),
+            ("/v2/foobar/test0", "TEST0", {"endpoint": endpoint}),
+            ("/v2/foobar/test1", "TEST1", {"endpoint": endpoint}),
+            ("/v1/foobar/test0", "DEPRECATED"),
+            ("/v1/foobar/test1", "DEPRECATED"),
         ]
 
         versioned = build_versioned_handlers(
