@@ -94,11 +94,11 @@ def deploy(branch=None, subdir=None):
                 run("make develop")
                 run("make test")
             else:
-                run("make install")
-                run("all-tests")
+                run("make develop")
+                run("make all-tests")
 
-            run("docs")
-            run("swagger")
+            run("make docs")
+            run("make swagger")
 
     # Stop the current running version
     with settings(warn_only=True):
