@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from setuptools import setup, find_packages
+from setuptools import setup
 
 exec(open("api/version.py").read())
 
@@ -17,9 +17,6 @@ setup(
         "Topic :: Internet :: WWW/HTTP"
     ],
     packages=["api"],
-    extras_require=dict(
-        dev=open("requirements-dev.txt").readlines(),
-    ),
     install_requires=open("requirements.txt").readlines(),
     zip_safe=False,
     entry_points={

@@ -149,7 +149,7 @@ def cleanup(type_="releases", max_to_keep=5):
     if len(candidates) <= max_to_keep:
         return
 
-    versions = filter(_is_version, candidates)
+    versions = list(filter(_is_version, candidates))
     versions.sort(reverse=True)
     for version in versions[max_to_keep:]:
         run("rm -rf %s" % version)
