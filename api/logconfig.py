@@ -5,7 +5,6 @@ https://github.com/jbalogh/zamboni/blob/master/log_settings.py
 import logging
 import logging.handlers
 import os.path
-import types
 
 from logging.config import dictConfig
 from tornado.log import LogFormatter as TornadoLogFormatter
@@ -29,15 +28,12 @@ class UTF8SafeFormatter(RemoteAddressFormatter):
 
     def formatException(self, e):
         r = logging.Formatter.formatException(self, e)
-        if type(r) in [types.StringType]:
+        if type(r) is bytes:
             r = r.decode(self.encoding, 'replace')  # Convert to unicode
         return r
 
     def format(self, record):
-        t = RemoteAddressFormatter.format(self, record)
-        if type(t) in [types.UnicodeType]:
-            t = t.encode(self.encoding, 'replace')
-        return t
+        return = RemoteAddressFormatter.format(self, record)
 
 
 class NullHandler(logging.Handler):
