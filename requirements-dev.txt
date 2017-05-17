@@ -3,3 +3,4 @@ pytest-cov>=2.3.0,<3.0.0
 pytest-pep8>=1.0.6,<2.0.0
 fabric3>=1.13,<1.14
 sphinx==1.4.5
+-e git://github.com/Supervisor/supervisor.git@ad272ce6a3b6a8f967a5a4efa3d9b7e4273c855c#egg=supervisor
