@@ -33,7 +33,7 @@ class UTF8SafeFormatter(RemoteAddressFormatter):
         return r
 
     def format(self, record):
-        return = RemoteAddressFormatter.format(self, record)
+        return RemoteAddressFormatter.format(self, record)
 
 
 class NullHandler(logging.Handler):
