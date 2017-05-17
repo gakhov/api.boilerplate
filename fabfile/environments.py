@@ -3,7 +3,8 @@ from fabric.api import env
 
 with open("etc/deploy.json") as f:
     config = json.load(f)
-
+    
+env.appname = config["deploy"]["appname"]
 env.use_ssh_config = True
 env.git_url = config["deploy"]["giturl"]
 
